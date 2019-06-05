@@ -9,7 +9,7 @@ Namespace:
 
 В каждом файле нужно обязательно указывать namespace для JAVA:
 
-  namespace java com.rbkmoney.damsel.<name>
+  namespace java com.rbkmoney.kkt.<name>
 Где <name> - имя, уникальное для Thrift IDL файлa в Damsel.
 
 Java development
@@ -21,7 +21,7 @@ make wc_java_install LOCAL_BUILD=true SETTINGS_XML=path_to_rbk_maven_settings
 
 <dependency>
     <groupId>com.rbkmoney</groupId>
-    <artifactId>damsel</artifactId>
+    <artifactId>kkt-proto</artifactId>
     <version>1.136-07b0898</version>
     <classifier>v136</classifier>
 </dependency>

@@ -68,8 +68,8 @@
                         <configuration>
                             <relocations>
                                 <relocation>
-                                    <pattern>com.rbkmoney.damsel</pattern>
-                                    <shadedPattern>com.rbkmoney.damsel.v${commit.number}</shadedPattern>
+                                    <pattern>com.rbkmoney.kkt-proto</pattern>
+                                    <shadedPattern>com.rbkmoney.kkt-proto.v${commit.number}</shadedPattern>
                                 </relocation>
                             </relocations>
                             <shadedArtifactAttached>true</shadedArtifactAttached>
