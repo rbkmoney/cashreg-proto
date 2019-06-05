@@ -69,7 +69,7 @@
                             <relocations>
                                 <relocation>
                                     <pattern>com.rbkmoney.kkt-proto</pattern>
-                                    <shadedPattern>com.rbkmoney.kkt-proto.v${commit.number}</shadedPattern>
+                                    <shadedPattern>com.rbkmoney.kkt.v${commit.number}</shadedPattern>
                                 </relocation>
                             </relocations>
                             <shadedArtifactAttached>true</shadedArtifactAttached>

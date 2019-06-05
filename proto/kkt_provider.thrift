@@ -101,6 +101,26 @@ struct CompanyInfo {
     2: required string address
     3: required string email
     4: required string inn
+    5: required TaxMode tax_mode
+}
+
+/**
+ * Режим налогообложения
+ *
+ * «osn» – общая СН;
+ * «usn_income» – упрощенная СН (доходы);
+ * «usn_income_outcome» – упрощенная СН (доходы минус расходы);
+ * «envd» – единый налог на вмененный доход;
+ * «esn» – единый сельскохозяйственный налог;
+ * «patent» – патентная СН.
+ **/
+enum TaxMode {
+    osn
+    usn_income
+    usn_income_outcome
+    envd
+    esn
+    patent
 }
 
 /**
