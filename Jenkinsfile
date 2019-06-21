@@ -1,7 +1,7 @@
 #!groovy
 // -*- mode: groovy -*-
 
-build('kkt-proto', 'docker-host') {
+build('cashreg-proto', 'docker-host') {
     checkoutRepo()
     loadBuildUtils()
 

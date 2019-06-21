@@ -1,4 +1,4 @@
-namespace java com.rbkmoney.file.storage.base
+namespace java com.rbkmoney.cashreg.base
 namespace erlang file_storage_base
 
 /** Сумма в минимальных денежных единицах. */

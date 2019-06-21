@@ -1,7 +1,7 @@
 include "base.thrift"
 
-namespace java com.rbkmoney.kkt.provider
-namespace erlang kkt_provider
+namespace java com.rbkmoney.cashreg.provider
+namespace erlang cashreg_provider
 
 
 /**
@@ -126,7 +126,7 @@ enum TaxMode {
 /**
  * Набор данных для взаимодействия с адаптером в рамках чеков онлайн.
  */
-struct KktContext {
+struct CashRegContext {
     // Уникальный идентификатор запроса
     1: required string          request_id
     2: required PaymentInfo     payment_info
@@ -141,7 +141,7 @@ struct KktContext {
 }
 
 
-struct KktResult {
+struct CashRegResult {
     1: required Intent intent
     // Необходимо для сохранения в базу, чтобы не искать по логам
     2: required string originalResponse
@@ -150,21 +150,21 @@ struct KktResult {
 /**
  * Сервис для взаимодействия с kkt
  */
-service KktProvider {
+service CashRegProvider {
 
     // Приход (доход)
-    KktResult Debit (1: KktContext context)
+    CashRegResult Debit (1: CashRegContext context)
 
     // Расход
-    KktResult Credit (1: KktContext context)
+    CashRegResult Credit (1: CashRegContext context)
 
     // Возврат прихода (дохода)
-    KktResult RefundDebit (1: KktContext context)
+    CashRegResult RefundDebit (1: CashRegContext context)
 
     // Возврат расхода
-    KktResult RefundCredit (1: KktContext context)
+    CashRegResult RefundCredit (1: CashRegContext context)
 
     // Запросить статус
-    KktResult GetStatus (1: KktContext context)
+    CashRegResult GetStatus (1: CashRegContext context)
 
 }
