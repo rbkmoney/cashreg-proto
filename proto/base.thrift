@@ -21,12 +21,7 @@ enum CashRegStatus {
 typedef string CurrencySymbolicCode
 
 /** Валюта. */
-struct Currency {
-    1: required string name
-    2: required CurrencySymbolicCode symbolic_code
-    3: required i16 numeric_code
-    4: required i16 exponent
-}
+struct CurrencyRef { 1: required CurrencySymbolicCode symbolic_code }
 
 
 typedef map<string, string> StringMap
@@ -41,5 +36,5 @@ struct ContactInfo {
 
 struct Cash {
     1: required Amount amount
-    2: required Currency currency
+    2: required CurrencyRef currency
 }
