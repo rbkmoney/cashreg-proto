@@ -1,7 +1,7 @@
 include "base.thrift"
 
-namespace java com.rbkmoney.cashreg.provider
-namespace erlang cashreg_provider
+namespace java com.rbkmoney.cashreg.proto.provider
+namespace erlang cashreg_proto_provider
 
 
 /**

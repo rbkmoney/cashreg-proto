@@ -74,7 +74,7 @@
                             <relocations>
                                 <relocation>
                                     <pattern>com.rbkmoney.cashreg-proto</pattern>
-                                    <shadedPattern>com.rbkmoney.cashreg.v${commit.number}</shadedPattern>
+                                    <shadedPattern>com.rbkmoney.cashreg-proto.v${commit.number}</shadedPattern>
                                 </relocation>
                             </relocations>
                             <shadedArtifactAttached>true</shadedArtifactAttached>

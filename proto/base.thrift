@@ -1,5 +1,5 @@
-namespace java com.rbkmoney.cashreg.base
-namespace erlang file_storage_base
+namespace java com.rbkmoney.cashreg.proto.base
+namespace erlang cashreg_proto_base
 
 /** Сумма в минимальных денежных единицах. */
 typedef i64 Amount
