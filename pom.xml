@@ -10,11 +10,11 @@
         <version>1.0.0</version>
     </parent>
 
-    <artifactId>kkt-proto</artifactId>
+    <artifactId>cashreg-proto</artifactId>
     <version>SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>kkt-proto</name>
+    <name>cashreg-proto</name>
     <description>Generates jar artifact containing compiled thrift classes based on generated thrift IDL files</description>
 
     <properties>
@@ -73,8 +73,8 @@
                         <configuration>
                             <relocations>
                                 <relocation>
-                                    <pattern>com.rbkmoney.kkt-proto</pattern>
-                                    <shadedPattern>com.rbkmoney.kkt.v${commit.number}</shadedPattern>
+                                    <pattern>com.rbkmoney.cashreg-proto</pattern>
+                                    <shadedPattern>com.rbkmoney.cashreg.v${commit.number}</shadedPattern>
                                 </relocation>
                             </relocations>
                             <shadedArtifactAttached>true</shadedArtifactAttached>
