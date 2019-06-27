@@ -68,6 +68,10 @@ struct PaymentInfo {
     3: required Cart        cart
 }
 
+struct CashRegInfo {
+    1: optional string      uuid
+}
+
 /**
  * Данные по плательщику
  **/
@@ -131,13 +135,16 @@ struct CashRegContext {
     1: required string          request_id
     2: required PaymentInfo     payment_info
     3: required AccountInfo     account_info
+    // Данные которые можем получить при асинхронном взаимодействии
+
+    4: required CashRegInfo     cashreg_info
 
     /**
      * Настройки для адаптера, могут различаться в разных адаптерах
      * Example:
      * url, login, pass, group_id, client_id, tax_id, tax_mode, payment_method, payment_object, key, private_key
      **/
-    4: optional base.Options    options      = {}
+    5: optional base.Options    options      = {}
 }
 
 
