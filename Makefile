@@ -10,7 +10,7 @@ TEMPLATES_PATH := .
 SERVICE_NAME := cashreg-proto
 
 # Build image tag to be used
-BUILD_IMAGE_TAG := 55e987e74e9457191a5b4a7c5dc9e3838ae82d2b
+BUILD_IMAGE_TAG := bdc05544014b3475c8e0726d3b3d6fc81b09db96
 CALL_ANYWHERE := \
 	all submodules compile clean distclean \
 	java.compile java.deploy
