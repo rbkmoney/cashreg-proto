@@ -167,25 +167,15 @@ struct PaymentInfo {
 
 struct Invoice {
     1: required domain.InvoiceID        id
-    2: required base.Timestamp          created_at
-    3: required base.Timestamp          due
-    7: required domain.InvoiceDetails   details
-    6: required Cash                    cash
 }
 
 struct InvoicePayment {
     1: required domain.InvoicePaymentID id
-    2: required base.Timestamp          created_at
-    3: optional domain.TransactionInfo  trx
-    5: required Cash                    cash
     7: required domain.ContactInfo      contact_info
 }
 
 struct InvoicePaymentRefund {
     1: required domain.InvoicePaymentRefundID id
-    2: required base.Timestamp                created_at
-    4: required Cash                          cash
-    3: optional domain.TransactionInfo        trx
 }
 
 struct Cash {
@@ -206,13 +196,15 @@ struct ItemsLine {
     3: required domain.Cash price
     4: required string      tax
 }
-
+union SourceCreation {
+    1: PaymentInfo payment
+}
 /**
  * Набор данных для взаимодействия с адаптером в рамках чеков онлайн.
  */
 struct CashRegContext {
     1: required Session         session
-    2: required PaymentInfo     payment_info
+    2: required SourceCreation  source_creation
     3: required AccountInfo     account_info
 
     /**
