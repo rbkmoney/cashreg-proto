@@ -20,7 +20,7 @@ struct RefundCredit { }
 /**
  * Целевое значение статуса чека.
  */
-union TargetCashRegStatus {
+union CashRegType {
 
     /**
      * Чек на Приход (доход)
@@ -150,8 +150,8 @@ enum TaxMode {
  * что поставленная цель достигнута, и чек перешёл в соответствующий статус.
  */
 struct Session {
-    1: required TargetCashRegStatus target
-    2: optional AdapterState        state
+    1: required CashRegType     type
+    2: optional AdapterState    state
 }
 
 /**
