@@ -12,10 +12,10 @@ namespace erlang cashreg_proto_provider
  */
 typedef base.Opaque AdapterState
 
-struct CashRegDebit { }
-struct CashRegCredit { }
-struct CashRegRefundDebit { }
-struct CashRegRefundCredit { }
+struct Debit { }
+struct Credit { }
+struct RefundDebit { }
+struct RefundCredit { }
 
 /**
  * Целевое значение статуса чека.
@@ -25,22 +25,22 @@ union TargetCashRegStatus {
     /**
      * Чек на Приход (доход)
      */
-    1: CashRegDebit         debit
+    1: Debit         debit
 
     /**
      * Чек на Расход
      */
-    2: CashRegCredit        credit
+    2: Credit        credit
 
     /**
      * Возврат прихода (дохода)
      */
-    3: CashRegRefundDebit   refund_debit
+    3: RefundDebit   refund_debit
 
     /**
      * Чек на Возврат расхода
      */
-    4: CashRegRefundCredit  refund_credit
+    4: RefundCredit  refund_credit
 
 }
 
@@ -92,12 +92,12 @@ struct CashRegResult {
 
 struct CashRegInfo {
     1: required string          receipt_id
-    2: optional base.Timestamp  timestamp // 05.06.2029 14:30:00
+    2: optional base.Timestamp  timestamp //   2029-06-05T14:30:00Z
     3: optional string          total // 500
     4: optional string          fns_site // www.nalog.ru
     5: optional string          fn_number // 9289000144256552
     6: optional string          shift_number // 218
-    7: optional string          receipt_datetime // 05.06.2029 14:29:00
+    7: optional base.Timestamp  receipt_datetime // 2029-06-05T14:29:00Z
     8: optional string          fiscal_receipt_number // 187
     9: optional string          fiscal_document_number // 85536
     10: optional string         ecr_registration_number // 0001411128011706
@@ -189,11 +189,8 @@ struct Payer {
  */
 struct CashRegContext {
     1: required Session         session
-
-    // Уникальный идентификатор запроса
-    2: required string          request_id
-    3: required PaymentInfo     payment_info
-    4: required AccountInfo     account_info
+    2: required PaymentInfo     payment_info
+    3: required AccountInfo     account_info
 
     /**
      * Настройки для адаптера, могут различаться в разных адаптерах
@@ -201,7 +198,7 @@ struct CashRegContext {
      * url, login, pass, group_id, client_id, tax_id, tax_mode, payment_method,
       *payment_object, key, private_key
      **/
-    5: optional domain.ProxyOptions    options      = {}
+    4: optional domain.ProxyOptions    options      = {}
 }
 
 
