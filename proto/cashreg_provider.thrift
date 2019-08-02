@@ -1,14 +1,57 @@
 include "base.thrift"
+include "domain.thrift"
+
 
 namespace java com.rbkmoney.cashreg.proto.provider
 namespace erlang cashreg_proto_provider
 
 
 /**
- * Требование адаптера, отражающее дальнейший прогресс сессии взаимодействия с третьей стороной.
+ * Непрозрачное для процессинга состояние адаптера,
+ * связанное с определённой сессией взаимодействия с третьей стороной.
+ */
+typedef base.Opaque AdapterState
+
+struct CashRegDebit { }
+struct CashRegCredit { }
+struct CashRegRefundDebit { }
+struct CashRegRefundCredit { }
+
+/**
+ * Целевое значение статуса чека.
+ */
+union TargetCashRegStatus {
+
+    /**
+     * Чек на Приход (доход)
+     */
+    1: CashRegDebit         debit
+
+    /**
+     * Чек на Расход
+     */
+    2: CashRegCredit        credit
+
+    /**
+     * Возврат прихода (дохода)
+     */
+    3: CashRegRefundDebit   refund_debit
+
+    /**
+     * Чек на Возврат расхода
+     */
+    4: CashRegRefundCredit  refund_credit
+
+}
+
+
+/**
+ * Требование к процессингу, отражающее дальнейший прогресс сессии взаимодействия
+ * с третьей стороной.
  */
 union Intent {
     1: FinishIntent finish
+    2: SleepIntent  sleep
 }
 
 /**
@@ -18,79 +61,51 @@ struct FinishIntent {
     1: required FinishStatus status
 }
 
+struct Success {
+}
+
+/**
+ * Требование прервать на определённое время сессию взаимодействия,
+ * с намерением продолжить её потом.
+ */
+struct SleepIntent {
+    /** Таймер, определяющий когда следует продолжить взаимодействие. */
+    1: required base.Timer timer
+}
+
+
 /**
  * Статус, c которым завершилась сессия взаимодействия с третьей стороной.
  */
 union FinishStatus {
     /** Успешное завершение взаимодействия. */
-    1: Success success
+    1: Success          success
     /** Неуспешное завершение взаимодействия с пояснением возникшей проблемы. */
-    2: Failure failure
+    2: domain.Failure   failure
 }
 
-struct Success {
-    // Если нужно еще запросить статус или продолжить поллинг
-    1: optional string uuid
-    // Получаем финальный ответ
-    2: optional Payload payload
+struct CashRegResult {
+    1: required Intent      intent
+    2: optional CashRegInfo cashreg_info
 }
 
-struct Payload {
-    // Уникальный идентификатор по которому необходимо будет запросить статус
-    1: optional string  uuid // 57969c81-ee1e-4fee-b2ae-8e3a652893ab
-    2: optional string  total // 500
-    3: optional string  fns_site // www.nalog.ru
-    4: optional string  fn_number // 9289000144256552
-    5: optional string  shift_number // 218
-    6: optional string  receipt_datetime // 05.06.2029 14:29:00
-    7: optional string  fiscal_receipt_number // 187
-    8: optional string  fiscal_document_number // 85536
-    9: optional string  ecr_registration_number // 0001411128011706
-    10: optional string fiscal_document_attribute // 36554593
-    11: optional string group_code // net_406
-    12: optional string daemon_code // prod-agnt-1
-    13: optional string device_code // KKT07513
-    14: optional string timestamp // 05.06.2029 14:30:00
-    15: optional string callback_url //
-}
-
-struct Failure {
-    1: required string code
-    2: optional string description
-}
-
-/**
- * Данные платежа, необходимые для обращения к адаптеру
- */
-struct PaymentInfo {
-    1: required Payer       payer
-    2: required base.Cash   cash
-    3: required Cart        cart
-}
 
 struct CashRegInfo {
-    1: optional string      uuid
-}
-
-/**
- * Данные по плательщику
- **/
-struct Payer {
-    1: required base.ContactInfo contact_info
-}
-
-/**
- * Корзина с товарами
- **/
-struct Cart {
-    1: required list<ItemsLine> lines
-}
-
-struct ItemsLine {
-    1: required string  product
-    2: required i32     quantity
-    3: required         base.Cash price
-    4: required string  tax
+    1: required string          receipt_id
+    2: optional base.Timestamp  timestamp // 05.06.2029 14:30:00
+    3: optional string          total // 500
+    4: optional string          fns_site // www.nalog.ru
+    5: optional string          fn_number // 9289000144256552
+    6: optional string          shift_number // 218
+    7: optional string          receipt_datetime // 05.06.2029 14:29:00
+    8: optional string          fiscal_receipt_number // 187
+    9: optional string          fiscal_document_number // 85536
+    10: optional string         ecr_registration_number // 0001411128011706
+    11: optional string         fiscal_document_attribute // 36554593
+    12: optional string         group_code // net_406
+    13: optional string         daemon_code // prod-agnt-1
+    14: optional string         device_code // KKT07513
+    15: optional string         callback_url //
 }
 
 /**
@@ -127,51 +142,74 @@ enum TaxMode {
     patent
 }
 
+
+/**
+ * Данные сессии взаимодействия с провайдером.
+ *
+ * В момент, когда приложение успешно завершает сессию взаимодействия, процессинг считает,
+ * что поставленная цель достигнута, и чек перешёл в соответствующий статус.
+ */
+struct Session {
+    1: required TargetCashRegStatus target
+    2: optional AdapterState        state
+}
+
+/**
+ * Данные платежа, необходимые для обращения к адаптеру
+ */
+struct PaymentInfo {
+    1: required Payer           payer
+    2: required domain.Cash     cash
+    3: required Cart            cart
+}
+
+/**
+ * Корзина с товарами
+ **/
+struct Cart {
+    1: required list<ItemsLine> lines
+}
+
+struct ItemsLine {
+    1: required string      product
+    2: required i32         quantity
+    3: required domain.Cash price
+    4: required string      tax
+}
+
+/**
+ * Данные по плательщику
+ **/
+struct Payer {
+    1: required domain.ContactInfo contact_info
+}
+
 /**
  * Набор данных для взаимодействия с адаптером в рамках чеков онлайн.
  */
 struct CashRegContext {
-    // Уникальный идентификатор запроса
-    1: required string          request_id
-    2: required PaymentInfo     payment_info
-    3: required AccountInfo     account_info
-    // Данные которые можем получить при асинхронном взаимодействии
+    1: required Session         session
 
-    4: required CashRegInfo     cashreg_info
+    // Уникальный идентификатор запроса
+    2: required string          request_id
+    3: required PaymentInfo     payment_info
+    4: required AccountInfo     account_info
 
     /**
      * Настройки для адаптера, могут различаться в разных адаптерах
      * Example:
-     * url, login, pass, group_id, client_id, tax_id, tax_mode, payment_method, payment_object, key, private_key
+     * url, login, pass, group_id, client_id, tax_id, tax_mode, payment_method,
+      *payment_object, key, private_key
      **/
-    5: optional base.Options    options      = {}
+    5: optional domain.ProxyOptions    options      = {}
 }
 
-
-struct CashRegResult {
-    1: required Intent intent
-    // Необходимо для сохранения в базу, чтобы не искать по логам
-    2: required string originalResponse
-}
 
 /**
  * Сервис для взаимодействия с kkt (Контрольно-кассовая техника, или ККТ)
  */
 service CashRegProvider {
 
-    // Приход (доход)
-    CashRegResult Debit (1: CashRegContext context)
-
-    // Расход
-    CashRegResult Credit (1: CashRegContext context)
-
-    // Возврат прихода (дохода)
-    CashRegResult RefundDebit (1: CashRegContext context)
-
-    // Возврат расхода
-    CashRegResult RefundCredit (1: CashRegContext context)
-
-    // Запросить статус
-    CashRegResult GetStatus (1: CashRegContext context)
+    CashRegResult Register (1: CashRegContext context)
 
 }

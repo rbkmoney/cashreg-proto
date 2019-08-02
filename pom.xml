@@ -33,6 +33,11 @@
             <artifactId>jsr250-api</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.rbkmoney</groupId>
+            <artifactId>damsel</artifactId>
+            <version>1.323-ae26a6c</version>
+        </dependency>
     </dependencies>
 
     <build>
