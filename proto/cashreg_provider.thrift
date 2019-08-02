@@ -158,9 +158,39 @@ struct Session {
  * Данные платежа, необходимые для обращения к адаптеру
  */
 struct PaymentInfo {
-    1: required Payer           payer
-    2: required domain.Cash     cash
-    3: required Cart            cart
+    1: required Invoice                 invoice
+    2: required InvoicePayment          payment
+    3: optional InvoicePaymentRefund    refund
+    4: required domain.Cash             cash
+    5: required Cart                    cart
+}
+
+struct Invoice {
+    1: required domain.InvoiceID        id
+    2: required base.Timestamp          created_at
+    3: required base.Timestamp          due
+    7: required domain.InvoiceDetails   details
+    6: required Cash                    cash
+}
+
+struct InvoicePayment {
+    1: required domain.InvoicePaymentID id
+    2: required base.Timestamp          created_at
+    3: optional domain.TransactionInfo  trx
+    5: required Cash                    cash
+    7: required domain.ContactInfo      contact_info
+}
+
+struct InvoicePaymentRefund {
+    1: required domain.InvoicePaymentRefundID id
+    2: required base.Timestamp                created_at
+    4: required Cash                          cash
+    3: optional domain.TransactionInfo        trx
+}
+
+struct Cash {
+    1: required domain.Amount   amount
+    2: required domain.Currency currency
 }
 
 /**
@@ -175,13 +205,6 @@ struct ItemsLine {
     2: required i32         quantity
     3: required domain.Cash price
     4: required string      tax
-}
-
-/**
- * Данные по плательщику
- **/
-struct Payer {
-    1: required domain.ContactInfo contact_info
 }
 
 /**
