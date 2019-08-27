@@ -112,15 +112,46 @@ struct CashRegInfo {
  * Данные о текущем аккаунте
  **/
 struct AccountInfo {
-    1: required CompanyInfo company_info
+    1: required LegalEntity legal_entity
 }
 
-struct CompanyInfo {
-    1: required string name
-    2: required string address
-    3: required string email
-    4: required string inn
-    5: required TaxMode tax_mode
+union LegalEntity {
+    1: RussianLegalEntity russian_legal_entity
+}
+
+/** Юридическое лицо-резидент РФ */
+struct RussianLegalEntity {
+    /* Наименование */
+    1: required string registered_name
+    /* ОГРН */
+    2: required string registered_number
+    /* ИНН/КПП */
+    3: required string inn
+    /* Адрес места нахождения */
+    4: required string actual_address
+    /* Адрес для отправки корреспонденции (почтовый) */
+    5: required string post_address
+    /* Электронный адрес */
+    6: required string email
+    /* Наименование должности ЕИО/представителя */
+    7: required string representative_position
+    /* ФИО ЕИО/представителя */
+    8: required string representative_full_name
+    /* Наименование документа, на основании которого действует ЕИО/представитель */
+    9: required string representative_document
+    /* Реквизиты юр.лица */
+    10: required RussianBankAccount russian_bank_account
+    /* Режим налогообложения */
+    11: required TaxMode tax_mode
+}
+
+/** Банковский счёт. */
+
+struct RussianBankAccount {
+    1: required string account
+    2: required string bank_name
+    3: required string bank_post_account
+    4: required string bank_bik
 }
 
 /**
@@ -211,7 +242,7 @@ struct CashRegContext {
      * Настройки для адаптера, могут различаться в разных адаптерах
      * Example:
      * url, login, pass, group_id, client_id, tax_id, tax_mode, payment_method,
-      *payment_object, key, private_key
+     * payment_object, key, private_key и т.д.
      **/
     4: optional domain.ProxyOptions    options      = {}
 }
