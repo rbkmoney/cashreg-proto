@@ -58,20 +58,17 @@ namespace erlang cashregprocerr
   */
 
 union CashRegFailure {
-    2: GeneralFailure       preauthorization_failed
-    3: AuthorizationFailure authorization_failed
+    1: GeneralFailure       unknown
+    2: VerificationFailure  verification_failure
+    3: GeneralFailure       temporarily_unavailable
+    4: GeneralFailure       certificate_expired
 }
 
-union AuthorizationFailure {
+union VerificationFailure {
      1: GeneralFailure    unknown
      2: GeneralFailure    merchant_blocked
-     3: GeneralFailure    operation_blocked
-     4: GeneralFailure    account_not_found
-     5: GeneralFailure    account_blocked
-     6: GeneralFailure    account_stolen
-     7: GeneralFailure    incorrect_currency
-     8: GeneralFailure    temporarily_unavailable
-     9: GeneralFailure    certificate_expired
+     3: GeneralFailure    account_not_found
+     4: GeneralFailure    account_blocked
 }
 
 struct GeneralFailure {}
