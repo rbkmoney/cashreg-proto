@@ -12,8 +12,7 @@ namespace erlang cashreg_provider
  */
 typedef base.Opaque AdapterState
 
-typedef base.ID CashRegID
-typedef list<Event> Events
+
 
 struct Debit { }
 struct Credit { }
@@ -21,97 +20,7 @@ struct RefundDebit { }
 struct RefundCredit { }
 
 
-/**
- * Событие, атомарный фрагмент истории бизнес-объекта
- */
-struct Event {
 
-    /**
-     * Идентификатор события.
-     * Монотонно возрастающее целочисленное значение, таким образом на множестве
-     * событий задаётся отношение полного порядка (total order)
-     */
-    1: required base.EventID id
-
-    /**
-     * Время создания события
-     */
-    2: required base.Timestamp created_at
-
-    /**
-     * Идентификатор бизнес-объекта, источника события
-     */
-    3: required EventSource source
-
-    /**
-     * Содержание события, состоящее из списка (возможно пустого)
-     * изменений состояния бизнес-объекта, источника события
-     */
-    4: required EventPayload payload
-
-}
-
-/**
- * Источник события, идентификатор бизнес-объекта, который породил его в
- * процессе выполнения определённого бизнес-процесса
- */
-union EventSource {
-    /* Идентификатор, который породил событие */
-    1: CashRegID cashreg_id
-}
-
-/**
- * Один из возможных вариантов содержания события
- */
-union EventPayload {
-    /* Набор изменений */
-    1: list<CashRegChange> cashreg_changes
-}
-
-/**
- * Один из возможных вариантов события
- */
-union CashRegChange {
-    1: CashRegCreated        cashreg_created
-    2: CashRegStatusChanged  cashreg_status_changed
-}
-
-union CashRegStatus {
-    1: CashRegUnsending unsending
-    2: CashRegSent      sent
-    3: CashRegConfirmed confirmed
-    4: CashRegFailed    failed
-}
-
-/**
- * Событие об изменении статуса
- */
-struct CashRegStatusChanged {
-    /* Новый статус */
-    1: required CashRegStatus status
-}
-
-/**
- * Событие о создании
- */
-struct CashRegCreated {
-}
-
-/* Создается в статусе unsending */
-struct CashRegUnsending {}
-
-/* Помечается статусом sent, когда удалось отправить */
-struct CashRegSent {}
-
-/* Помечается статусом confirmed, когда удалось доставить */
-struct CashRegConfirmed {
- 1: required string receipt_id
-}
-
-/* Помечается статусом failed, когда не удалось доставить */
-struct CashRegFailed {
- 1: required string details
-}
 
 /**
  * Целевое значение статуса чека.
