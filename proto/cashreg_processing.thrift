@@ -10,8 +10,11 @@ include "cashreg_provider.thrift"
 namespace java com.rbkmoney.damsel.cashreg_processing
 namespace erlang cashregproc
 
-typedef base.ID CashRegID
+typedef base.ID     CashRegID
 typedef list<Event> Events
+
+typedef domain.PartyID PartyID
+typedef domain.ShopID  ShopID
 
 
 /**
@@ -66,15 +69,14 @@ union EventPayload {
  */
 union CashRegChange {
     1: CashRegCreated        created
-    2: CashRegStatusChanged  cashreg_status_changed
+    2: CashRegStatusChanged  status_changed
+    3: CashRegSessionChange  session_change
 }
 
 union CashRegStatus {
-    1: CashRegVerification  verification
-    2: CashRegPending       pending
-    3: CashRegDisabled      disabled
-    4: CashRegDelivered     delivered
-    5: CashRegFailed        failed
+    1: CashRegPending       pending
+    2: CashRegDelivered     delivered
+    3: CashRegFailed        failed
 }
 
 /**
@@ -85,36 +87,62 @@ struct CashRegStatusChanged {
     1: required CashRegStatus status
 }
 
+struct CashRegSessionChange {
+    1: required SessionChangePayload payload
+}
+
+union SessionChangePayload {
+    1: SessionStarted               session_started
+    2: SessionFinished              session_finished
+    3: SessionStateChanged          session_state_changed
+}
+
+struct SessionStarted {
+    1: required domain.ProxyOptions options
+}
+
+struct SessionStateChanged {
+    1: required cashreg_provider.AdapterState state
+}
+
+struct SessionFinished {
+    1: required SessionResult result
+}
+
+union SessionResult {
+    1: SessionSucceeded succeeded
+    2: SessionFailed    failed
+}
+
+struct SessionSucceeded {
+    1: optional cashreg_provider.CashRegInfo    info
+}
+
+struct SessionFailed {
+    1: required domain.OperationFailure failure
+}
+
 /**
  * Событие о создании
  */
 struct CashRegCreated {
-    1: required cashreg_provider.CashRegContext context
+    1: required PartyID                         party_id
+    2: required ShopID                          shop_id
+    3: required cashreg_provider.SourceCreation source_creation
+    4: required cashreg_provider.CashRegType    type
 }
-
-/* Когда надо проверить, включена ли возможность отправки */
-struct CashRegVerification {
-    1: required cashreg_provider.CashRegContext context
-}
-
 
 /* Создается в статусе pending */
 struct CashRegPending {
-    1: required cashreg_provider.CashRegContext context
-}
-
-/* Помечается статусом disabled, когда взаимодействие с кассой прекращено */
-struct CashRegDisabled {
- 1: required domain.Failure failure
+    1: required cashreg_provider.AccountInfo account_info
 }
 
 /* Помечается статусом delivered, когда удалось доставить */
 struct CashRegDelivered {
-    1: required cashreg_provider.CashRegContext context
-    2: required cashreg_provider.CashRegInfo    info
+    1: required cashreg_provider.CashRegInfo    info
 }
 
 /* Помечается статусом failed, когда не удалось доставить */
 struct CashRegFailed {
- 1: required domain.Failure failure
+    1: required domain.Failure failure
 }

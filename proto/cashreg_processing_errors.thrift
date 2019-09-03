@@ -60,8 +60,12 @@ namespace erlang cashregprocerr
 union CashRegFailure {
     1: GeneralFailure       unknown
     2: VerificationFailure  verification_failure
-    3: GeneralFailure       temporarily_unavailable
-    4: GeneralFailure       certificate_expired
+    3: DeliveryFailure      delivery_failure
+}
+
+union DeliveryFailure {
+    1: GeneralFailure       unknown
+    2: GeneralFailure       certificate_expired
 }
 
 union VerificationFailure {
