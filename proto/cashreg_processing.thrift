@@ -1,148 +1,154 @@
-/**
- * Определения и сервисы процессинга.
- */
-
-include "base.thrift"
-include "domain.thrift"
-include "user_interaction.thrift"
-include "cashreg_provider.thrift"
 
 namespace java com.rbkmoney.damsel.cashreg_processing
 namespace erlang cashregproc
 
-typedef base.ID     CashRegID
-typedef list<Event> Events
+include "cashreg.thrift"
+include "base.thrift"
+include "cashreg_status.thrift"
+include "cashreg_type.thrift"
+include "domain.thrift"
+include "cashreg_repairer.thrift"
 
-typedef domain.PartyID PartyID
-typedef domain.ShopID  ShopID
+typedef base.ID                 CashRegID
+typedef base.ID                 SessionID
+typedef base.EventRange         EventRange
+typedef base.EventID            EventID
+typedef cashreg_status.Status   Status
+typedef domain.PartyID          PartyID
+typedef domain.ShopID           ShopID
 
 
-/**
- * Событие, атомарный фрагмент истории бизнес-объекта
- */
 struct Event {
-
-    /**
-     * Идентификатор события.
-     * Монотонно возрастающее целочисленное значение, таким образом на множестве
-     * событий задаётся отношение полного порядка (total order)
-     */
-    1: required base.EventID id
-
-    /**
-     * Время создания события
-     */
-    2: required base.Timestamp created_at
-
-    /**
-     * Идентификатор бизнес-объекта, источника события
-     */
-    3: required EventSource source
-
-    /**
-     * Содержание события, состоящее из списка (возможно пустого)
-     * изменений состояния бизнес-объекта, источника события
-     */
-    4: required EventPayload payload
-
+    1: required EventID              event
+    2: required base.Timestamp       occured_at
+    3: required Change               change
 }
 
-/**
- * Источник события, идентификатор бизнес-объекта, который породил его в
- * процессе выполнения определённого бизнес-процесса
- */
-union EventSource {
-    /* Идентификатор, который породил событие */
-    1: CashRegID cashreg_id
+union Change {
+    1: CreatedChange    created
+    2: StatusChange     status_changed
+    3: SessionChange    session
 }
 
-/**
- * Один из возможных вариантов содержания события
- */
-union EventPayload {
-    /* Набор изменений */
-    1: list<CashRegChange> cashreg_changes
+struct CreatedChange {
+    1: required CashReg cashreg
 }
 
-/**
- * Один из возможных вариантов события
- */
-union CashRegChange {
-    1: CashRegCreated        created
-    2: CashRegStatusChanged  status_changed
-    3: CashRegSessionChange  session_change
+struct StatusChange {
+    1: required Status status
 }
 
-union CashRegStatus {
-    1: CashRegPending       pending
-    2: CashRegDelivered     delivered
-    3: CashRegFailed        failed
-}
-
-/**
- * Событие об изменении статуса
- */
-struct CashRegStatusChanged {
-    /* Новый статус */
-    1: required CashRegStatus status
-}
-
-struct CashRegSessionChange {
-    1: required SessionChangePayload payload
+struct SessionChange {
+    1: required SessionID id
+    2: required SessionChangePayload payload
 }
 
 union SessionChangePayload {
-    1: SessionStarted               session_started
-    2: SessionFinished              session_finished
-    3: SessionStateChanged          session_state_changed
+    1: SessionStarted   started
+    2: SessionFinished  finished
 }
 
-struct SessionStarted {
-    1: required domain.ProxyOptions options
+struct SessionStarted {}
+struct SessionFinished {}
+
+
+struct CashReg {
+    1: required PartyID             party_id
+    2: required ShopID              shop_id
+    3: required PaymentInfo         payment_info
+    4: required cashreg_type.Type   type
+    5: optional Status              status
+    6: optional CashRegInfo         info
 }
 
-struct SessionStateChanged {
-    1: required cashreg_provider.AdapterState state
+struct CashRegParams {
+    1: required PartyID             party_id
+    2: required ShopID              shop_id
+    3: required PaymentInfo         payment_info
+    4: required cashreg_type.Type   type
 }
 
-struct SessionFinished {
-    1: required SessionResult result
-}
-
-union SessionResult {
-    1: SessionSucceeded succeeded
-    2: SessionFailed    failed
-}
-
-struct SessionSucceeded {
-    1: optional cashreg_provider.CashRegInfo    info
-}
-
-struct SessionFailed {
-    1: required domain.OperationFailure failure
+struct CashRegInfo {
+    1: required string          receipt_id
+    2: optional base.Timestamp  timestamp //   2029-06-05T14:30:00Z
+    3: optional string          total // 500
+    4: optional string          fns_site // www.nalog.ru
+    5: optional string          fn_number // 9289000144256552
+    6: optional string          shift_number // 218
+    7: optional base.Timestamp  receipt_datetime // 2029-06-05T14:29:00Z
+    8: optional string          fiscal_receipt_number // 187
+    9: optional string          fiscal_document_number // 85536
+    10: optional string         ecr_registration_number // 0001411128011706
+    11: optional string         fiscal_document_attribute // 36554593
+    12: optional string         group_code // net_406
+    13: optional string         daemon_code // prod-agnt-1
+    14: optional string         device_code // KKT07513
+    15: optional string         callback_url //
 }
 
 /**
- * Событие о создании
+ * Данные платежа, необходимые для обращения к адаптеру
  */
-struct CashRegCreated {
-    1: required PartyID                         party_id
-    2: required ShopID                          shop_id
-    3: required cashreg_provider.SourceCreation source_creation
-    4: required cashreg_provider.CashRegType    type
+struct PaymentInfo {
+    1: required CashRegID               cashreg_id
+    4: required domain.Cash             cash
+    5: required Cart                    cart
 }
 
-/* Создается в статусе pending */
-struct CashRegPending {
-    1: required cashreg_provider.AccountInfo account_info
+struct Cash {
+    1: required domain.Amount   amount
+    2: required domain.Currency currency
 }
 
-/* Помечается статусом delivered, когда удалось доставить */
-struct CashRegDelivered {
-    1: required cashreg_provider.CashRegInfo    info
+/**
+ * Корзина с товарами
+ **/
+struct Cart {
+    1: required list<ItemsLine> lines
 }
 
-/* Помечается статусом failed, когда не удалось доставить */
-struct CashRegFailed {
-    1: required domain.Failure failure
+struct ItemsLine {
+    1: required string      product
+    2: required i32         quantity
+    3: required domain.Cash price
+    4: required string      tax
+}
+
+service Management {
+
+    CashReg Create(1: CashRegParams params)
+        throws (
+            1: cashreg.IDExists                    ex1
+            2: cashreg.CashRegNotFound             ex2
+        )
+
+    CashReg Get(1: CashRegID id)
+        throws ( 1: cashreg.CashRegNotFound ex1)
+
+    list<Event> GetEvents(
+        1: CashRegID id
+        2: EventRange range)
+        throws (
+            1: cashreg.CashRegNotFound ex1
+        )
+}
+
+
+/// Repair
+
+union RepairScenario {
+    1: AddEventsRepair add_events
+}
+
+struct AddEventsRepair {
+    1: required list<Change>                    events
+    2: optional cashreg_repairer.ComplexAction  action
+}
+
+service Repairer {
+    void Repair(1: CashRegID id, 2: RepairScenario scenario)
+        throws (
+            1: cashreg.CashRegNotFound ex1
+            2: cashreg.MachineAlreadyWorking ex2
+        )
 }

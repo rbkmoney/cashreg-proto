@@ -1,54 +1,19 @@
 include "base.thrift"
 include "domain.thrift"
+include "cashreg_type.thrift"
 
 
 namespace java com.rbkmoney.damsel.cashreg.provider
 namespace erlang cashreg_provider
 
 
+typedef base.ID     CashRegID
+
 /**
  * Непрозрачное для процессинга состояние адаптера,
  * связанное с определённой сессией взаимодействия с третьей стороной.
  */
 typedef base.Opaque AdapterState
-
-
-
-struct Debit { }
-struct Credit { }
-struct RefundDebit { }
-struct RefundCredit { }
-
-
-
-
-/**
- * Целевое значение статуса чека.
- */
-union CashRegType {
-
-    /**
-     * Чек на Приход (доход)
-     */
-    1: Debit         debit
-
-    /**
-     * Чек на Расход
-     */
-    2: Credit        credit
-
-    /**
-     * Возврат прихода (дохода)
-     */
-    3: RefundDebit   refund_debit
-
-    /**
-     * Чек на Возврат расхода
-     */
-    4: RefundCredit  refund_credit
-
-}
-
 
 /**
  * Требование к процессингу, отражающее дальнейший прогресс сессии взаимодействия
@@ -186,32 +151,17 @@ enum TaxMode {
  * что поставленная цель достигнута, и чек перешёл в соответствующий статус.
  */
 struct Session {
-    1: required CashRegType     type
-    2: optional AdapterState    state
+    1: required cashreg_type.Type   type
+    2: optional AdapterState        state
 }
 
 /**
  * Данные платежа, необходимые для обращения к адаптеру
  */
 struct PaymentInfo {
-    1: required Invoice                 invoice
-    2: required InvoicePayment          payment
-    3: optional InvoicePaymentRefund    refund
+    1: required CashRegID               id
     4: required domain.Cash             cash
     5: required Cart                    cart
-}
-
-struct Invoice {
-    1: required domain.InvoiceID        id
-}
-
-struct InvoicePayment {
-    1: required domain.InvoicePaymentID id
-    7: required domain.ContactInfo      contact_info
-}
-
-struct InvoicePaymentRefund {
-    1: required domain.InvoicePaymentRefundID id
 }
 
 struct Cash {
@@ -232,6 +182,7 @@ struct ItemsLine {
     3: required domain.Cash price
     4: required string      tax
 }
+
 union SourceCreation {
     1: PaymentInfo payment
 }

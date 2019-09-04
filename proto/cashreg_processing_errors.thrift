@@ -20,12 +20,9 @@ namespace erlang cashregprocerr
   * ### Статически типизированное представление
   *
   * ```
-  * PaymentFailure{
-  *     authorization_failed = AuthorizationFailure{
-  *         payment_tool_rejected = PaymentToolReject{
-  *             bank_card_rejected = BankCardReject{
-  *                 cvv_invalid = GeneralFailure{}
-  *             }
+  * CashRegFailure{
+  *     verification_failure = VerificationFailure{
+  *         unknown = GeneralFailure{
   *         }
   *     }
   * }
@@ -34,23 +31,17 @@ namespace erlang cashregprocerr
   *
   * ### Текстовое представление (нужно только если есть желание представлять ошибки в виде текста)
   *
-  * `authorization_failed:payment_tool_rejected:bank_card_rejected:cvv_invalid`
+  * `verification_failure:unknown`
   *
   *
   * ### Динамически типизированное представление
   *
   * ```
   * domain.Failure{
-  *     code = "authorization_failed",
-  *     reason = "sngb error '87' — 'Invalid CVV'",
+  *     code = "verification_failure",
+  *     reason = "error — description",
   *     sub = domain.SubFailure{
-  *         code = "payment_tool_rejected",
-  *         sub = domain.SubFailure{
-  *             code = "bank_card_rejected",
-  *             sub = domain.SubFailure{
-  *                 code = "cvv_invalid"
-  *             }
-  *         }
+  *         code = "unknown",
   *     }
   * }
   * ```
