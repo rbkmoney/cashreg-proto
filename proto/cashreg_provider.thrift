@@ -142,9 +142,8 @@ struct Session {
  * Данные платежа, необходимые для обращения к адаптеру
  */
 struct PaymentInfo {
-    1: required CashRegID               id
-    4: required domain.Cash             cash
-    5: required Cart                    cart
+    1: required domain.Cash             cash
+    2: required Cart                    cart
 }
 
 struct Cash {

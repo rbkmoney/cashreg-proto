@@ -68,28 +68,29 @@ struct SessionFailed {
 
 
 struct CashReg {
-    1: required PartyID             party_id
-    2: required ShopID              shop_id
-    3: required PaymentInfo         payment_info
-    4: required cashreg_type.Type   type
-    5: required Status              status
-    6: optional cashreg.CashRegInfo info
+    1: required CashRegID           id
+    2: required PartyID             party_id
+    3: required ShopID              shop_id
+    4: required PaymentInfo         payment_info
+    5: required cashreg_type.Type   type
+    6: required Status              status
+    7: optional cashreg.CashRegInfo info
 }
 
 struct CashRegParams {
-    1: required PartyID             party_id
-    2: required ShopID              shop_id
-    3: required PaymentInfo         payment_info
-    4: required cashreg_type.Type   type
+    1: required CashRegID           id
+    2: required PartyID             party_id
+    3: required ShopID              shop_id
+    4: required PaymentInfo         payment_info
+    5: required cashreg_type.Type   type
 }
 
 /**
  * Данные платежа, необходимые для обращения к адаптеру
  */
 struct PaymentInfo {
-    1: required CashRegID               cashreg_id
-    4: required domain.Cash             cash
-    5: required Cart                    cart
+    1: required domain.Cash             cash
+    2: required Cart                    cart
 }
 
 struct Cash {
