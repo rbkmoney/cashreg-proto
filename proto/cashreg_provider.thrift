@@ -1,49 +1,20 @@
 include "base.thrift"
 include "domain.thrift"
+include "cashreg.thrift"
+include "cashreg_type.thrift"
 
 
 namespace java com.rbkmoney.damsel.cashreg.provider
 namespace erlang cashreg_provider
 
 
+typedef base.ID     CashRegID
+
 /**
  * Непрозрачное для процессинга состояние адаптера,
  * связанное с определённой сессией взаимодействия с третьей стороной.
  */
 typedef base.Opaque AdapterState
-
-struct Debit { }
-struct Credit { }
-struct RefundDebit { }
-struct RefundCredit { }
-
-/**
- * Целевое значение статуса чека.
- */
-union CashRegType {
-
-    /**
-     * Чек на Приход (доход)
-     */
-    1: Debit         debit
-
-    /**
-     * Чек на Расход
-     */
-    2: Credit        credit
-
-    /**
-     * Возврат прихода (дохода)
-     */
-    3: RefundDebit   refund_debit
-
-    /**
-     * Чек на Возврат расхода
-     */
-    4: RefundCredit  refund_credit
-
-}
-
 
 /**
  * Требование к процессингу, отражающее дальнейший прогресс сессии взаимодействия
@@ -85,28 +56,10 @@ union FinishStatus {
 }
 
 struct CashRegResult {
-    1: required Intent      intent
-    2: optional CashRegInfo cashreg_info
+    1: required Intent              intent
+    2: optional cashreg.CashRegInfo cashreg_info
 }
 
-
-struct CashRegInfo {
-    1: required string          receipt_id
-    2: optional base.Timestamp  timestamp //   2029-06-05T14:30:00Z
-    3: optional string          total // 500
-    4: optional string          fns_site // www.nalog.ru
-    5: optional string          fn_number // 9289000144256552
-    6: optional string          shift_number // 218
-    7: optional base.Timestamp  receipt_datetime // 2029-06-05T14:29:00Z
-    8: optional string          fiscal_receipt_number // 187
-    9: optional string          fiscal_document_number // 85536
-    10: optional string         ecr_registration_number // 0001411128011706
-    11: optional string         fiscal_document_attribute // 36554593
-    12: optional string         group_code // net_406
-    13: optional string         daemon_code // prod-agnt-1
-    14: optional string         device_code // KKT07513
-    15: optional string         callback_url //
-}
 
 /**
  * Данные о текущем аккаунте
@@ -181,32 +134,16 @@ enum TaxMode {
  * что поставленная цель достигнута, и чек перешёл в соответствующий статус.
  */
 struct Session {
-    1: required CashRegType     type
-    2: optional AdapterState    state
+    1: required cashreg_type.Type   type
+    2: optional AdapterState        state
 }
 
 /**
  * Данные платежа, необходимые для обращения к адаптеру
  */
 struct PaymentInfo {
-    1: required Invoice                 invoice
-    2: required InvoicePayment          payment
-    3: optional InvoicePaymentRefund    refund
-    4: required domain.Cash             cash
-    5: required Cart                    cart
-}
-
-struct Invoice {
-    1: required domain.InvoiceID        id
-}
-
-struct InvoicePayment {
-    1: required domain.InvoicePaymentID id
-    7: required domain.ContactInfo      contact_info
-}
-
-struct InvoicePaymentRefund {
-    1: required domain.InvoicePaymentRefundID id
+    1: required domain.Cash             cash
+    2: required Cart                    cart
 }
 
 struct Cash {
@@ -227,6 +164,7 @@ struct ItemsLine {
     3: required domain.Cash price
     4: required string      tax
 }
+
 union SourceCreation {
     1: PaymentInfo payment
 }
