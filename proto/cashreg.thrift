@@ -2,6 +2,7 @@
 namespace java com.rbkmoney.damsel.cashreg
 namespace erlang cashreg
 
+include "base.thrift"
 
 exception CashRegNotFound        {}
 exception CashRegSessionNotFound {}

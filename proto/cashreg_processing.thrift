@@ -49,7 +49,22 @@ union SessionChangePayload {
 }
 
 struct SessionStarted {}
-struct SessionFinished {}
+struct SessionFinished {
+    1: required SessionResult result
+}
+
+union SessionResult {
+    1: SessionSucceeded succeeded
+    2: SessionFailed    failed
+}
+
+struct SessionSucceeded {
+    1: required cashreg.CashRegInfo info
+}
+
+struct SessionFailed {
+    1: required base.Failure failure
+}
 
 
 struct CashReg {
