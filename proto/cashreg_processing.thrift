@@ -106,7 +106,7 @@ struct Cash {
 
 service Management {
 
-    CashReg Create(1: CashRegParams params)
+    void Create(1: CashRegParams params)
         throws (
             1: cashreg.CashRegNotFound  ex1
         )
