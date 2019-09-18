@@ -30,7 +30,6 @@ struct CashRegInfo {
     15: optional string         callback_url //
 }
 
-
 /**
  * Корзина с товарами
  **/
