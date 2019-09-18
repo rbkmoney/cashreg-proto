@@ -8,6 +8,7 @@ include "cashreg_status.thrift"
 include "cashreg_type.thrift"
 include "domain.thrift"
 include "cashreg_repairer.thrift"
+include "msgpack.thrift"
 
 typedef base.ID                 CashRegID
 typedef base.ID                 SessionID
@@ -46,11 +47,16 @@ struct SessionChange {
 union SessionChangePayload {
     1: SessionStarted   started
     2: SessionFinished  finished
+    3: SessionAdapterStateChanged  session_adapter_state_changed
 }
 
 struct SessionStarted {}
 struct SessionFinished {
     1: required SessionResult result
+}
+
+struct SessionAdapterStateChanged {
+    1: required msgpack.Value state
 }
 
 union SessionResult {
@@ -89,8 +95,8 @@ struct CashRegParams {
  * Данные платежа, необходимые для обращения к адаптеру
  */
 struct PaymentInfo {
-    1: required domain.Cash             cash
-    2: required Cart                    cart
+    1: required domain.Cash     cash
+    2: required cashreg.Cart    cart
 }
 
 struct Cash {
@@ -98,25 +104,11 @@ struct Cash {
     2: required domain.Currency currency
 }
 
-/**
- * Корзина с товарами
- **/
-struct Cart {
-    1: required list<ItemsLine> lines
-}
-
-struct ItemsLine {
-    1: required string      product
-    2: required i32         quantity
-    3: required domain.Cash price
-    4: required string      tax
-}
-
 service Management {
 
     CashReg Create(1: CashRegParams params)
         throws (
-            1: cashreg.CashRegNotFound             ex1
+            1: cashreg.CashRegNotFound  ex1
         )
 
     CashReg Get(1: CashRegID id)

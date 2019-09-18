@@ -142,27 +142,14 @@ struct Session {
  * Данные платежа, необходимые для обращения к адаптеру
  */
 struct PaymentInfo {
-    1: required domain.Cash             cash
-    2: required Cart                    cart
+    1: required domain.Cash     cash
+    2: required cashreg.Cart    cart
+    3: required string          email
 }
 
 struct Cash {
     1: required domain.Amount   amount
     2: required domain.Currency currency
-}
-
-/**
- * Корзина с товарами
- **/
-struct Cart {
-    1: required list<ItemsLine> lines
-}
-
-struct ItemsLine {
-    1: required string      product
-    2: required i32         quantity
-    3: required domain.Cash price
-    4: required string      tax
 }
 
 union SourceCreation {
