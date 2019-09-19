@@ -1,5 +1,6 @@
 include "base.thrift"
 include "domain.thrift"
+include "cashreg_domain.thrift"
 include "cashreg.thrift"
 include "cashreg_type.thrift"
 
@@ -44,7 +45,6 @@ struct SleepIntent {
     1: required base.Timer timer
 }
 
-
 /**
  * Статус, c которым завершилась сессия взаимодействия с третьей стороной.
  */
@@ -60,73 +60,6 @@ struct CashRegResult {
     2: optional cashreg.CashRegInfo cashreg_info
 }
 
-
-/**
- * Данные о текущем аккаунте
- **/
-struct AccountInfo {
-    1: required LegalEntity legal_entity
-}
-
-union LegalEntity {
-    1: RussianLegalEntity russian_legal_entity
-}
-
-/** Юридическое лицо-резидент РФ */
-struct RussianLegalEntity {
-    /* Наименование */
-    1: required string registered_name
-    /* ОГРН */
-    2: required string registered_number
-    /* ИНН/КПП */
-    3: required string inn
-    /* Адрес места нахождения */
-    4: required string actual_address
-    /* Адрес для отправки корреспонденции (почтовый) */
-    5: required string post_address
-    /* Электронный адрес */
-    6: required string email
-    /* Наименование должности ЕИО/представителя */
-    7: required string representative_position
-    /* ФИО ЕИО/представителя */
-    8: required string representative_full_name
-    /* Наименование документа, на основании которого действует ЕИО/представитель */
-    9: required string representative_document
-    /* Реквизиты юр.лица */
-    10: required RussianBankAccount russian_bank_account
-    /* Режим налогообложения */
-    11: required TaxMode tax_mode
-}
-
-/** Банковский счёт. */
-
-struct RussianBankAccount {
-    1: required string account
-    2: required string bank_name
-    3: required string bank_post_account
-    4: required string bank_bik
-}
-
-/**
- * Режим налогообложения
- *
- * «osn» – общая СН;
- * «usn_income» – упрощенная СН (доходы);
- * «usn_income_outcome» – упрощенная СН (доходы минус расходы);
- * «envd» – единый налог на вмененный доход;
- * «esn» – единый сельскохозяйственный налог;
- * «patent» – патентная СН.
- **/
-enum TaxMode {
-    osn
-    usn_income
-    usn_income_outcome
-    envd
-    esn
-    patent
-}
-
-
 /**
  * Данные сессии взаимодействия с провайдером.
  *
@@ -138,30 +71,16 @@ struct Session {
     2: optional AdapterState        state
 }
 
-/**
- * Данные платежа, необходимые для обращения к адаптеру
- */
-struct PaymentInfo {
-    1: required domain.Cash     cash
-    2: required cashreg.Cart    cart
-    3: required string          email
-}
-
-struct Cash {
-    1: required domain.Amount   amount
-    2: required domain.Currency currency
-}
-
 union SourceCreation {
-    1: PaymentInfo payment
+    1: cashreg_domain.PaymentInfo payment
 }
 /**
  * Набор данных для взаимодействия с адаптером в рамках чеков онлайн.
  */
 struct CashRegContext {
-    1: required Session         session
-    2: required SourceCreation  source_creation
-    3: required AccountInfo     account_info
+    1: required Session                         session
+    2: required SourceCreation                  source_creation
+    3: required cashreg_domain.AccountInfo      account_info
 
     /**
      * Настройки для адаптера, могут различаться в разных адаптерах
@@ -171,7 +90,6 @@ struct CashRegContext {
      **/
     4: optional domain.ProxyOptions    options      = {}
 }
-
 
 /**
  * Сервис для взаимодействия с kkt (Контрольно-кассовая техника, или ККТ)

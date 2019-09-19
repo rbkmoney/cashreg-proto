@@ -9,14 +9,22 @@ include "cashreg_type.thrift"
 include "domain.thrift"
 include "cashreg_repairer.thrift"
 include "msgpack.thrift"
+include "cashreg_provider.thrift"
+include "cashreg_domain.thrift"
 
-typedef base.ID                 CashRegID
-typedef base.ID                 SessionID
-typedef base.EventRange         EventRange
-typedef base.EventID            EventID
-typedef cashreg_status.Status   Status
-typedef domain.PartyID          PartyID
-typedef domain.ShopID           ShopID
+typedef base.ID                             CashRegID
+typedef base.ID                             SessionID
+typedef base.EventRange                     EventRange
+typedef base.EventID                        EventID
+typedef cashreg_status.Status               Status
+typedef cashreg_provider.CashRegContext     ContextStatus
+typedef domain.PartyID                      PartyID
+typedef domain.ShopID                       ShopID
+/**
+ * Непрозрачное для процессинга состояние адаптера,
+ * связанное с определённой сессией взаимодействия с третьей стороной.
+ */
+typedef base.Opaque AdapterState
 
 
 struct Event {
@@ -40,17 +48,18 @@ struct StatusChange {
 }
 
 struct SessionChange {
-    1: required SessionID id
-    2: required SessionChangePayload payload
+    1: required SessionID               id
+    2: required SessionChangePayload    payload
 }
 
 union SessionChangePayload {
-    1: SessionStarted   started
-    2: SessionFinished  finished
-    3: SessionAdapterStateChanged  session_adapter_state_changed
+    1: SessionStarted               started
+    2: SessionFinished              finished
+    3: SessionAdapterStateChanged   session_adapter_state_changed
 }
 
 struct SessionStarted {}
+
 struct SessionFinished {
     1: required SessionResult result
 }
@@ -72,36 +81,23 @@ struct SessionFailed {
     1: required base.Failure failure
 }
 
-
 struct CashReg {
-    1: required CashRegID           id
-    2: required PartyID             party_id
-    3: required ShopID              shop_id
-    4: required PaymentInfo         payment_info
-    5: required cashreg_type.Type   type
-    6: required Status              status
-    7: optional cashreg.CashRegInfo info
+    1: required CashRegID                       id
+    2: required PartyID                         party_id
+    3: required ShopID                          shop_id
+    4: required cashreg_domain.PaymentInfo      payment_info
+    5: required cashreg_type.Type               type
+    6: required Status                          status
+    7: required cashreg_domain.AccountInfo      account_info
+    8: optional cashreg.CashRegInfo             info
 }
 
 struct CashRegParams {
-    1: required CashRegID           id
-    2: required PartyID             party_id
-    3: required ShopID              shop_id
-    4: required PaymentInfo         payment_info
-    5: required cashreg_type.Type   type
-}
-
-/**
- * Данные платежа, необходимые для обращения к адаптеру
- */
-struct PaymentInfo {
-    1: required domain.Cash     cash
-    2: required cashreg.Cart    cart
-}
-
-struct Cash {
-    1: required domain.Amount   amount
-    2: required domain.Currency currency
+    1: required CashRegID                       id
+    2: required PartyID                         party_id
+    3: required ShopID                          shop_id
+    4: required cashreg_domain.PaymentInfo      payment_info
+    5: required cashreg_type.Type               type
 }
 
 service Management {
