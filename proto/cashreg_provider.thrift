@@ -57,7 +57,8 @@ union FinishStatus {
 
 struct CashRegResult {
     1: required Intent              intent
-    2: optional cashreg.CashRegInfo cashreg_info
+    2: optional AdapterState        state
+    3: optional cashreg.CashRegInfo cashreg_info
 }
 
 /**
