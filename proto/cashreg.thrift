@@ -3,6 +3,7 @@ namespace java com.rbkmoney.damsel.cashreg
 namespace erlang cashreg
 
 include "base.thrift"
+include "domain.thrift"
 
 exception CashRegNotFound        {}
 exception CashRegSessionNotFound {}
@@ -27,4 +28,18 @@ struct CashRegInfo {
     13: optional string         daemon_code // prod-agnt-1
     14: optional string         device_code // KKT07513
     15: optional string         callback_url //
+}
+
+/**
+ * Корзина с товарами
+ **/
+struct Cart {
+    1: required list<ItemsLine> lines
+}
+
+struct ItemsLine {
+    1: required string      product
+    2: required i32         quantity
+    3: required domain.Cash price
+    4: required string      tax
 }
