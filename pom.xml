@@ -24,7 +24,6 @@
     </properties>
 
     <dependencies>
-        <!--rbkmoney-->
         <dependency>
             <groupId>com.rbkmoney.woody</groupId>
             <artifactId>woody-thrift</artifactId>
@@ -49,7 +48,7 @@
                 <configuration>
                     <generator>java:fullcamel</generator>
                     <thriftSourceRoot>${project.basedir}/proto</thriftSourceRoot>
-                    <thriftExecutable></thriftExecutable>
+                    <thriftExecutable/>
                 </configuration>
                 <executions>
                     <execution>
@@ -71,16 +70,6 @@
                         <goals>
                             <goal>shade</goal>
                         </goals>
-                        <configuration>
-                            <relocations>
-                                <relocation>
-                                    <pattern>com.rbkmoney.damsel</pattern>
-                                    <shadedPattern>com.rbkmoney.damsel.v${commit.number}</shadedPattern>
-                                </relocation>
-                            </relocations>
-                            <shadedArtifactAttached>true</shadedArtifactAttached>
-                            <shadedClassifierName>v${commit.number}</shadedClassifierName>
-                        </configuration>
                     </execution>
                 </executions>
             </plugin>
