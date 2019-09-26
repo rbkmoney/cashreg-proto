@@ -70,6 +70,16 @@
                         <goals>
                             <goal>shade</goal>
                         </goals>
+                        <configuration>
+                            <relocations>
+                                <relocation>
+                                    <pattern>com.rbkmoney.damsel</pattern>
+                                    <shadedPattern>com.rbkmoney.damsel.v${commit.number}</shadedPattern>
+                                </relocation>
+                            </relocations>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <shadedClassifierName>v${commit.number}</shadedClassifierName>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
