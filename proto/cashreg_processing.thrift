@@ -20,6 +20,7 @@ typedef cashreg_status.Status               Status
 typedef cashreg_provider.CashRegContext     ContextStatus
 typedef domain.PartyID                      PartyID
 typedef domain.ShopID                       ShopID
+
 /**
  * Непрозрачное для процессинга состояние адаптера,
  * связанное с определённой сессией взаимодействия с третьей стороной.
@@ -89,7 +90,9 @@ struct CashReg {
     5: required cashreg_type.Type               type
     6: required Status                          status
     7: required cashreg_domain.AccountInfo      account_info
-    8: optional cashreg.CashRegInfo             info
+    8: required domain.DataRevision             domain_revision
+    9: optional domain.PartyRevision            party_revision
+    10: optional cashreg.CashRegInfo            info
 }
 
 struct CashRegParams {

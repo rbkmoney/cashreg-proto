@@ -24,7 +24,6 @@
     </properties>
 
     <dependencies>
-        <!--rbkmoney-->
         <dependency>
             <groupId>com.rbkmoney.woody</groupId>
             <artifactId>woody-thrift</artifactId>
@@ -49,7 +48,7 @@
                 <configuration>
                     <generator>java:fullcamel</generator>
                     <thriftSourceRoot>${project.basedir}/proto</thriftSourceRoot>
-                    <thriftExecutable></thriftExecutable>
+                    <thriftExecutable/>
                 </configuration>
                 <executions>
                     <execution>
