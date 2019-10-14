@@ -99,8 +99,9 @@ struct CashRegParams {
     1: required CashRegID                       id
     2: required PartyID                         party_id
     3: required ShopID                          shop_id
-    4: required cashreg_domain.PaymentInfo      payment_info
-    5: required cashreg_type.Type               type
+    4: required domain.CashRegProviderRef       cashreg_provider_ref
+    5: required cashreg_domain.PaymentInfo      payment_info
+    6: required cashreg_type.Type               type
 }
 
 service Management {
