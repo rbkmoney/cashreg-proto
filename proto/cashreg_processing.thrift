@@ -93,6 +93,7 @@ struct CashReg {
     8: required domain.DataRevision             domain_revision
     9: optional domain.PartyRevision            party_revision
     10: optional cashreg.CashRegInfo            info
+    11: required domain.CashRegProviderRef      cashreg_provider_ref
 }
 
 struct CashRegParams {
