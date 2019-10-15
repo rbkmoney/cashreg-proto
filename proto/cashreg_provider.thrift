@@ -79,9 +79,10 @@ union SourceCreation {
  * Набор данных для взаимодействия с адаптером в рамках чеков онлайн.
  */
 struct CashRegContext {
-    1: required Session                         session
-    2: required SourceCreation                  source_creation
-    3: required cashreg_domain.AccountInfo      account_info
+    1: required CashRegID                       cashreg_id
+    2: required Session                         session
+    3: required SourceCreation                  source_creation
+    4: required cashreg_domain.AccountInfo      account_info
 
     /**
      * Настройки для адаптера, могут различаться в разных адаптерах
@@ -89,7 +90,7 @@ struct CashRegContext {
      * url, login, pass, group_id, client_id, tax_id, tax_mode, payment_method,
      * payment_object, key, private_key и т.д.
      **/
-    4: optional domain.ProxyOptions    options      = {}
+    5: optional domain.ProxyOptions             options      = {}
 }
 
 /**
