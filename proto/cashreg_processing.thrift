@@ -12,6 +12,7 @@ include "msgpack.thrift"
 include "cashreg_provider.thrift"
 include "cashreg_domain.thrift"
 
+typedef base.ID                             CashregProviderID
 typedef base.ID                             CashRegID
 typedef base.ID                             SessionID
 typedef base.EventRange                     EventRange
@@ -83,10 +84,10 @@ struct SessionFailed {
 }
 
 struct CashReg {
-    1: required CashRegID                       id
+    1: required CashRegID                       cashreg_id
     2: required PartyID                         party_id
     3: required ShopID                          shop_id
-    4: required domain.CashRegProviderRef       cashreg_provider_ref
+    4: required CashregProviderID               cashreg_provider_id
     5: required cashreg_domain.PaymentInfo      payment_info
     6: required cashreg_type.Type               type
     7: required Status                          status
@@ -97,10 +98,10 @@ struct CashReg {
 }
 
 struct CashRegParams {
-    1: required CashRegID                       id
+    1: required CashRegID                       cashreg_id
     2: required PartyID                         party_id
     3: required ShopID                          shop_id
-    4: required domain.CashRegProviderRef       cashreg_provider_ref
+    4: required CashregProviderID               cashreg_provider_id
     5: required cashreg_domain.PaymentInfo      payment_info
     6: required cashreg_type.Type               type
 }
@@ -112,11 +113,11 @@ service Management {
             1: cashreg.CashRegNotFound  ex1
         )
 
-    CashReg Get(1: CashRegID id)
+    CashReg Get(1: CashRegID cashreg_id)
         throws ( 1: cashreg.CashRegNotFound ex1)
 
     list<Event> GetEvents(
-        1: CashRegID id
+        1: CashRegID cashreg_id
         2: EventRange range)
         throws (
             1: cashreg.CashRegNotFound ex1
@@ -136,7 +137,7 @@ struct AddEventsRepair {
 }
 
 service Repairer {
-    void Repair(1: CashRegID id, 2: RepairScenario scenario)
+    void Repair(1: CashRegID cashreg_id, 2: RepairScenario scenario)
         throws (
             1: cashreg.CashRegNotFound ex1
             2: cashreg.MachineAlreadyWorking ex2
