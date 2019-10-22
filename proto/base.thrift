@@ -56,7 +56,6 @@ union Timer {
  */
 struct Failure {
     1: required FailureCode     code;
-
     2: optional FailureReason   reason;
     3: optional SubFailure      sub;
 }
