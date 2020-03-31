@@ -99,7 +99,7 @@ struct CashReg {
 
 struct CashRegProvider {
     1: required CashregProviderID               cashreg_provider_id
-    2: map<string, string>                      cashreg_provider_params
+    2: required map<string, string>             cashreg_provider_params
 }
 
 struct CashRegParams {
