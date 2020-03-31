@@ -3,6 +3,8 @@ namespace java com.rbkmoney.damsel.cashreg.repairer
 namespace erlang cashreg_repairer
 
 include "base.thrift"
+include "cashreg_processing.thrift"
+include "cashreg_receipt.thrift"
 
 struct ComplexAction {
     1: optional TimerAction    timer
@@ -28,3 +30,20 @@ union Timer {
 }
 
 struct RemoveAction {}
+
+union RepairScenario {
+    1: AddEventsRepair add_events
+}
+
+struct AddEventsRepair {
+    1: required list<cashreg_processing.Change> events
+    2: optional ComplexAction                   action
+}
+
+service Repairer {
+    void Repair(1: cashreg_receipt.ReceiptID receipt_id, 2: RepairScenario scenario)
+        throws (
+            1: cashreg_receipt.ReceiptNotFound ex1
+            2: cashreg_receipt.MachineAlreadyWorking ex2
+        )
+}

@@ -11,9 +11,10 @@ exception MachineAlreadyWorking  {}
 exception IDExists               {}
 exception OperationNotPermitted { 1: optional string details }
 
+typedef base.ID                 ReceiptID
 
 struct ReceiptInfo {
-    1: required string          receipt_id
+    1: required ReceiptID       receipt_id
     2: optional base.Timestamp  timestamp //   2029-06-05T14:30:00Z
     3: optional string          total // 500
     4: optional string          fns_site // www.nalog.ru

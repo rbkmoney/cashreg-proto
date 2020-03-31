@@ -13,7 +13,6 @@ include "cashreg_adapter.thrift"
 include "cashreg_domain.thrift"
 
 typedef base.ID                             CashRegisterProviderID
-typedef base.ID                             ReceiptID
 typedef base.ID                             SessionID
 typedef base.EventRange                     EventRange
 typedef base.EventID                        EventID
@@ -82,7 +81,7 @@ struct SessionFailed {
 }
 
 struct Receipt {
-    1: required ReceiptID                       receipt_id
+    1: required cashreg_receipt.ReceiptID       receipt_id
     2: required PartyID                         party_id
     3: required ShopID                          shop_id
     4: required CashRegisterProviderID          cashreg_provider_id
@@ -101,7 +100,7 @@ struct CashRegisterProvider {
 }
 
 struct ReceiptParams {
-    1: required ReceiptID                       receipt_id
+    1: required cashreg_receipt.ReceiptID       receipt_id
     2: required PartyID                         party_id
     3: required ShopID                          shop_id
     4: required list<CashRegisterProvider>      cash_register_providers
@@ -116,35 +115,15 @@ service Management {
             1: cashreg_receipt.ReceiptNotFound  ex1
         )
 
-    Receipt Get(1: ReceiptID receipt_id)
+    Receipt Get(1: cashreg_receipt.ReceiptID receipt_id)
         throws (
             1: cashreg_receipt.ReceiptNotFound ex1
          )
 
     list<Event> GetEvents(
-        1: ReceiptID receipt_id
+        1: cashreg_receipt.ReceiptID receipt_id
         2: EventRange range)
         throws (
             1: cashreg_receipt.ReceiptNotFound ex1
-        )
-}
-
-
-/// Repair
-
-union RepairScenario {
-    1: AddEventsRepair add_events
-}
-
-struct AddEventsRepair {
-    1: required list<Change>                    events
-    2: optional cashreg_repairer.ComplexAction  action
-}
-
-service Repairer {
-    void Repair(1: ReceiptID receipt_id, 2: RepairScenario scenario)
-        throws (
-            1: cashreg_receipt.ReceiptNotFound ex1
-            2: cashreg_receipt.MachineAlreadyWorking ex2
         )
 }
