@@ -94,15 +94,15 @@ struct Receipt {
 }
 
 struct CashRegisterProvider {
-    1: required CashRegisterProviderID          cash_register_provider_id
-    2: required map<string, string>             cash_register_provider_params
+    1: required CashRegisterProviderID          provider_id
+    2: required map<string, string>             provider_params
 }
 
 struct ReceiptParams {
     1: required cashreg_receipt.ReceiptID       receipt_id
     2: required PartyID                         party_id
     3: required ShopID                          shop_id
-    4: required list<CashRegisterProvider>      cash_register_providers
+    4: required list<CashRegisterProvider>      providers
     5: required cashreg_domain.PaymentInfo      payment_info
     6: required cashreg_receipt_type.Type       type
 }

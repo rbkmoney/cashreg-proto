@@ -56,9 +56,9 @@ union FinishStatus {
 }
 
 struct CashregResult {
-    1: required Intent              intent
-    2: optional AdapterState        state
-    3: optional cashreg_receipt.ReceiptInfo cashreg_info
+    1: required Intent                      intent
+    2: optional AdapterState                state
+    3: optional cashreg_receipt.ReceiptInfo info
 }
 
 /**
