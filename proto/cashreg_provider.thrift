@@ -68,7 +68,7 @@ struct CashRegResult {
  * что поставленная цель достигнута, и чек перешёл в соответствующий статус.
  */
 struct Session {
-    1: required cashreg_type.Type   type
+    1: required cashreg_receipt_type.Type   type
     2: optional AdapterState        state
 }
 
