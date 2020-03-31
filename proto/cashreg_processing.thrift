@@ -9,7 +9,7 @@ include "cashreg_receipt_type.thrift"
 include "domain.thrift"
 include "cashreg_repairer.thrift"
 include "msgpack.thrift"
-include "cashreg_provider.thrift"
+include "cashreg_adapter.thrift"
 include "cashreg_domain.thrift"
 
 typedef base.ID                             CashRegisterProviderID
@@ -17,8 +17,7 @@ typedef base.ID                             ReceiptID
 typedef base.ID                             SessionID
 typedef base.EventRange                     EventRange
 typedef base.EventID                        EventID
-typedef cashreg_receipt_status.Status               Status
-typedef cashreg_provider.CashRegContext     ContextStatus
+typedef cashreg_receipt_status.Status       Status
 typedef domain.PartyID                      PartyID
 typedef domain.ShopID                       ShopID
 
@@ -88,12 +87,12 @@ struct Receipt {
     3: required ShopID                          shop_id
     4: required CashRegisterProviderID          cashreg_provider_id
     5: required cashreg_domain.PaymentInfo      payment_info
-    6: required cashreg_receipt_type.Type               type
+    6: required cashreg_receipt_type.Type       type
     7: required Status                          status
     8: required cashreg_domain.AccountInfo      account_info
     9: required domain.DataRevision             domain_revision
     10: optional domain.PartyRevision           party_revision
-    11: optional cashreg_receipt.ReceiptInfo            info
+    11: optional cashreg_receipt.ReceiptInfo    info
 }
 
 struct CashRegisterProvider {
@@ -107,7 +106,7 @@ struct ReceiptParams {
     3: required ShopID                          shop_id
     4: required list<CashRegisterProvider>      cash_register_providers
     5: required cashreg_domain.PaymentInfo      payment_info
-    6: required cashreg_receipt_type.Type               type
+    6: required cashreg_receipt_type.Type       type
 }
 
 service Management {

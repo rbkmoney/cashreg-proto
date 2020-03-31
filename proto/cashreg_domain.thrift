@@ -9,9 +9,9 @@ include "cashreg_receipt.thrift"
  * Данные платежа, необходимые для обращения к адаптеру
  */
 struct PaymentInfo {
-    1: required domain.Cash     cash
+    1: required domain.Cash             cash
     2: required cashreg_receipt.Cart    cart
-    3: required string          email
+    3: required string                  email
 }
 
 struct Cash {

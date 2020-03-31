@@ -5,8 +5,8 @@ include "cashreg_receipt.thrift"
 include "cashreg_receipt_type.thrift"
 
 
-namespace java com.rbkmoney.damsel.cashreg.provider
-namespace erlang cashreg_provider
+namespace java com.rbkmoney.damsel.cashreg.adapter
+namespace erlang cashreg_adapter
 
 
 typedef base.ID     CashRegID
@@ -96,7 +96,7 @@ struct CashRegContext {
 /**
  * Сервис для взаимодействия с kkt (Контрольно-кассовая техника, или ККТ)
  */
-service CashRegProvider {
+service CashRegAdapter {
 
     CashRegResult Register (1: CashRegContext context)
 
