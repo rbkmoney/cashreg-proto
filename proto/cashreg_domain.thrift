@@ -1,6 +1,6 @@
 
-namespace java com.rbkmoney.damsel.cashreg_domain
-namespace erlang cashregprocdomain
+namespace java com.rbkmoney.damsel.cashreg.domain
+namespace erlang cashreg_domain
 
 include "domain.thrift"
 include "cashreg_receipt.thrift"

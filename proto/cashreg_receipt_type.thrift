@@ -1,6 +1,6 @@
 
-namespace java com.rbkmoney.damsel.cashreg.type
-namespace erlang cashreg_type
+namespace java com.rbkmoney.damsel.cashreg.receipt.type
+namespace erlang cashreg_receipt_type
 
 
 struct Debit { }

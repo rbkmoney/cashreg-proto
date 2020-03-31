@@ -2,7 +2,7 @@ include "base.thrift"
 include "domain.thrift"
 include "cashreg_domain.thrift"
 include "cashreg_receipt.thrift"
-include "cashreg_type.thrift"
+include "cashreg_receipt_type.thrift"
 
 
 namespace java com.rbkmoney.damsel.cashreg.provider
