@@ -1,18 +1,18 @@
 
-namespace java com.rbkmoney.damsel.cashreg
-namespace erlang cashreg
+namespace java com.rbkmoney.damsel.cashreg_receipt
+namespace erlang cashreg_receipt
 
 include "base.thrift"
 include "domain.thrift"
 
-exception CashRegNotFound        {}
+exception ReceiptNotFound        {}
 exception CashRegSessionNotFound {}
 exception MachineAlreadyWorking  {}
 exception IDExists               {}
 exception OperationNotPermitted { 1: optional string details }
 
 
-struct CashRegInfo {
+struct ReceiptInfo {
     1: required string          receipt_id
     2: optional base.Timestamp  timestamp //   2029-06-05T14:30:00Z
     3: optional string          total // 500

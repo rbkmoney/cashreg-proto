@@ -1,8 +1,8 @@
 
 namespace java com.rbkmoney.damsel.cashreg_processing
-namespace erlang cashregproc
+namespace erlang cashreg_processing
 
-include "cashreg.thrift"
+include "cashreg_receipt.thrift"
 include "base.thrift"
 include "cashreg_status.thrift"
 include "cashreg_type.thrift"
@@ -12,8 +12,8 @@ include "msgpack.thrift"
 include "cashreg_provider.thrift"
 include "cashreg_domain.thrift"
 
-typedef base.ID                             CashregProviderID
-typedef base.ID                             CashRegID
+typedef base.ID                             CashRegisterProviderID
+typedef base.ID                             ReceiptID
 typedef base.ID                             SessionID
 typedef base.EventRange                     EventRange
 typedef base.EventID                        EventID
@@ -28,7 +28,6 @@ typedef domain.ShopID                       ShopID
  */
 typedef base.Opaque AdapterState
 
-
 struct Event {
     1: required EventID              event
     2: required base.Timestamp       occured_at
@@ -42,7 +41,7 @@ union Change {
 }
 
 struct CreatedChange {
-    1: required CashReg cashreg
+    1: required Receipt receipt
 }
 
 struct StatusChange {
@@ -76,56 +75,58 @@ union SessionResult {
 }
 
 struct SessionSucceeded {
-    1: required cashreg.CashRegInfo info
+    1: required cashreg_receipt.ReceiptInfo info
 }
 
 struct SessionFailed {
     1: required base.Failure failure
 }
 
-struct CashReg {
-    1: required CashRegID                       cashreg_id
+struct Receipt {
+    1: required ReceiptID                       receipt_id
     2: required PartyID                         party_id
     3: required ShopID                          shop_id
-    4: required CashregProviderID               cashreg_provider_id
+    4: required CashRegisterProviderID          cashreg_provider_id
     5: required cashreg_domain.PaymentInfo      payment_info
     6: required cashreg_type.Type               type
     7: required Status                          status
     8: required cashreg_domain.AccountInfo      account_info
     9: required domain.DataRevision             domain_revision
     10: optional domain.PartyRevision           party_revision
-    11: optional cashreg.CashRegInfo            info
+    11: optional cashreg_receipt.ReceiptInfo            info
 }
 
-struct CashRegProvider {
-    1: required CashregProviderID               cashreg_provider_id
-    2: required map<string, string>             cashreg_provider_params
+struct CashRegisterProvider {
+    1: required CashRegisterProviderID          cash_register_provider_id
+    2: required map<string, string>             cash_register_provider_params
 }
 
-struct CashRegParams {
-    1: required CashRegID                       cashreg_id
+struct ReceiptParams {
+    1: required ReceiptID                       receipt_id
     2: required PartyID                         party_id
     3: required ShopID                          shop_id
-    4: required list<CashRegProvider>           cashreg_providers
+    4: required list<CashRegisterProvider>      cash_register_providers
     5: required cashreg_domain.PaymentInfo      payment_info
     6: required cashreg_type.Type               type
 }
 
 service Management {
 
-    void Create(1: CashRegParams params)
+    void Create(1: ReceiptParams receipt_params)
         throws (
-            1: cashreg.CashRegNotFound  ex1
+            1: cashreg_receipt.ReceiptNotFound  ex1
         )
 
-    CashReg Get(1: CashRegID cashreg_id)
-        throws ( 1: cashreg.CashRegNotFound ex1)
+    Receipt Get(1: ReceiptID receipt_id)
+        throws (
+            1: cashreg_receipt.ReceiptNotFound ex1
+         )
 
     list<Event> GetEvents(
-        1: CashRegID cashreg_id
+        1: ReceiptID receipt_id
         2: EventRange range)
         throws (
-            1: cashreg.CashRegNotFound ex1
+            1: cashreg_receipt.ReceiptNotFound ex1
         )
 }
 
@@ -142,9 +143,9 @@ struct AddEventsRepair {
 }
 
 service Repairer {
-    void Repair(1: CashRegID cashreg_id, 2: RepairScenario scenario)
+    void Repair(1: ReceiptID receipt_id, 2: RepairScenario scenario)
         throws (
-            1: cashreg.CashRegNotFound ex1
-            2: cashreg.MachineAlreadyWorking ex2
+            1: cashreg_receipt.ReceiptNotFound ex1
+            2: cashreg_receipt.MachineAlreadyWorking ex2
         )
 }

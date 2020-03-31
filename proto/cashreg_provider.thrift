@@ -1,7 +1,7 @@
 include "base.thrift"
 include "domain.thrift"
 include "cashreg_domain.thrift"
-include "cashreg.thrift"
+include "cashreg_receipt.thrift"
 include "cashreg_type.thrift"
 
 
@@ -58,7 +58,7 @@ union FinishStatus {
 struct CashRegResult {
     1: required Intent              intent
     2: optional AdapterState        state
-    3: optional cashreg.CashRegInfo cashreg_info
+    3: optional cashreg_receipt.ReceiptInfo cashreg_info
 }
 
 /**
