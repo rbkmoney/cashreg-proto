@@ -9,7 +9,7 @@ namespace java com.rbkmoney.damsel.cashreg.adapter
 namespace erlang cashreg_adapter
 
 
-typedef base.ID     CashRegID
+typedef base.ID     CashregID
 
 /**
  * Непрозрачное для процессинга состояние адаптера,
@@ -55,7 +55,7 @@ union FinishStatus {
     2: domain.Failure   failure
 }
 
-struct CashRegResult {
+struct CashregResult {
     1: required Intent              intent
     2: optional AdapterState        state
     3: optional cashreg_receipt.ReceiptInfo cashreg_info
@@ -78,8 +78,8 @@ union SourceCreation {
 /**
  * Набор данных для взаимодействия с адаптером в рамках чеков онлайн.
  */
-struct CashRegContext {
-    1: required CashRegID                       cashreg_id
+struct CashregContext {
+    1: required CashregID                       cashreg_id
     2: required Session                         session
     3: required SourceCreation                  source_creation
     4: required cashreg_domain.AccountInfo      account_info
@@ -96,8 +96,8 @@ struct CashRegContext {
 /**
  * Сервис для взаимодействия с kkt (Контрольно-кассовая техника, или ККТ)
  */
-service CashRegAdapter {
+service CashregAdapter {
 
-    CashRegResult Register (1: CashRegContext context)
+    CashregResult Register (1: CashregContext context)
 
 }

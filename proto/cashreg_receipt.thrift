@@ -6,7 +6,7 @@ include "base.thrift"
 include "domain.thrift"
 
 exception ReceiptNotFound        {}
-exception CashRegSessionNotFound {}
+exception CashregSessionNotFound {}
 exception MachineAlreadyWorking  {}
 exception IDExists               {}
 exception OperationNotPermitted { 1: optional string details }
