@@ -97,11 +97,16 @@ struct CashReg {
     11: optional cashreg.CashRegInfo            info
 }
 
+struct CashRegProvider {
+    1: required CashregProviderID               cashreg_provider_id
+    2: map<string, string>                      cashreg_provider_params
+}
+
 struct CashRegParams {
     1: required CashRegID                       cashreg_id
     2: required PartyID                         party_id
     3: required ShopID                          shop_id
-    4: required CashregProviderID               cashreg_provider_id
+    4: required list<CashRegProvider>           cashreg_providers
     5: required cashreg_domain.PaymentInfo      payment_info
     6: required cashreg_type.Type               type
 }
