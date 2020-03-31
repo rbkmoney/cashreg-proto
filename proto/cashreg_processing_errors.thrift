@@ -1,5 +1,5 @@
 namespace java com.rbkmoney.damsel.Cashreg.processing.errors
-namespace erlang Cashreg_processing_errors
+namespace erlang cashreg_processing_errors
 
 /**
   *
