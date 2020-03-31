@@ -2,8 +2,8 @@
  * Статусы
  */
 
-namespace java com.rbkmoney.damsel.cashreg.status
-namespace erlang cashreg_status
+namespace java com.rbkmoney.damsel.cashreg.receipt.status
+namespace erlang cashreg_receipt_status
 
 include "base.thrift"
 typedef base.Failure          Failure

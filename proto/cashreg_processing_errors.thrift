@@ -1,5 +1,5 @@
-namespace java com.rbkmoney.damsel.cashreg_processing.errors
-namespace erlang cashregprocerr
+namespace java com.rbkmoney.damsel.Cashreg.processing.errors
+namespace erlang cashreg_processing_errors
 
 /**
   *
@@ -20,7 +20,7 @@ namespace erlang cashregprocerr
   * ### Статически типизированное представление
   *
   * ```
-  * CashRegFailure{
+  * CashregFailure{
   *     verification_failure = VerificationFailure{
   *         unknown = GeneralFailure{
   *         }
@@ -48,7 +48,7 @@ namespace erlang cashregprocerr
   *
   */
 
-union CashRegFailure {
+union CashregFailure {
     1: GeneralFailure       unknown
     2: VerificationFailure  verification_failure
     3: DeliveryFailure      delivery_failure

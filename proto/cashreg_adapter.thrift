@@ -1,15 +1,15 @@
 include "base.thrift"
 include "domain.thrift"
 include "cashreg_domain.thrift"
-include "cashreg.thrift"
-include "cashreg_type.thrift"
+include "cashreg_receipt.thrift"
+include "cashreg_receipt_type.thrift"
 
 
-namespace java com.rbkmoney.damsel.cashreg.provider
-namespace erlang cashreg_provider
+namespace java com.rbkmoney.damsel.cashreg.adapter
+namespace erlang cashreg_adapter
 
 
-typedef base.ID     CashRegID
+typedef base.ID     CashregID
 
 /**
  * Непрозрачное для процессинга состояние адаптера,
@@ -55,10 +55,10 @@ union FinishStatus {
     2: domain.Failure   failure
 }
 
-struct CashRegResult {
-    1: required Intent              intent
-    2: optional AdapterState        state
-    3: optional cashreg.CashRegInfo cashreg_info
+struct CashregResult {
+    1: required Intent                      intent
+    2: optional AdapterState                state
+    3: optional cashreg_receipt.ReceiptInfo info
 }
 
 /**
@@ -68,7 +68,7 @@ struct CashRegResult {
  * что поставленная цель достигнута, и чек перешёл в соответствующий статус.
  */
 struct Session {
-    1: required cashreg_type.Type   type
+    1: required cashreg_receipt_type.Type   type
     2: optional AdapterState        state
 }
 
@@ -78,8 +78,8 @@ union SourceCreation {
 /**
  * Набор данных для взаимодействия с адаптером в рамках чеков онлайн.
  */
-struct CashRegContext {
-    1: required CashRegID                       cashreg_id
+struct CashregContext {
+    1: required CashregID                       cashreg_id
     2: required Session                         session
     3: required SourceCreation                  source_creation
     4: required cashreg_domain.AccountInfo      account_info
@@ -96,8 +96,8 @@ struct CashRegContext {
 /**
  * Сервис для взаимодействия с kkt (Контрольно-кассовая техника, или ККТ)
  */
-service CashRegProvider {
+service CashregAdapter {
 
-    CashRegResult Register (1: CashRegContext context)
+    CashregResult Register (1: CashregContext context)
 
 }

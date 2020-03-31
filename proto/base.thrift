@@ -60,8 +60,8 @@ struct Failure {
     3: optional SubFailure      sub;
 }
 
-typedef string FailureCode;
-typedef string FailureReason; // причина возникшей ошибки и пояснение откуда она взялась
+typedef string FailureCode
+typedef string FailureReason // причина возникшей ошибки и пояснение откуда она взялась
 
 // возможность делать коды ошибок иерархическими
 struct SubFailure {

@@ -1,17 +1,17 @@
 
-namespace java com.rbkmoney.damsel.cashreg_domain
-namespace erlang cashregprocdomain
+namespace java com.rbkmoney.damsel.cashreg.domain
+namespace erlang cashreg_domain
 
 include "domain.thrift"
-include "cashreg.thrift"
+include "cashreg_receipt.thrift"
 
 /**
  * Данные платежа, необходимые для обращения к адаптеру
  */
 struct PaymentInfo {
-    1: required domain.Cash     cash
-    2: required cashreg.Cart    cart
-    3: required string          email
+    1: required domain.Cash             cash
+    2: required cashreg_receipt.Cart    cart
+    3: required string                  email
 }
 
 struct Cash {
