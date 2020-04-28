@@ -83,7 +83,7 @@ struct Receipt {
     1: required cashreg_receipt.ReceiptID       receipt_id
     2: required PartyID                         party_id
     3: required ShopID                          shop_id
-    4: required CashRegisterProviderID          cashreg_provider_id
+    4: required CashRegisterProvider            cashreg_provider
     5: required cashreg_domain.PaymentInfo      payment_info
     6: required cashreg_receipt_type.Type       type
     7: required Status                          status
