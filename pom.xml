@@ -7,33 +7,56 @@
     <parent>
         <groupId>com.rbkmoney</groupId>
         <artifactId>parent</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.5</version>
     </parent>
 
     <artifactId>cashreg-proto</artifactId>
     <version>SNAPSHOT</version>
     <packaging>jar</packaging>
 
-
     <name>Cashreg</name>
     <description>Generates jar artifact containing compiled thrift classes based on generated thrift IDL files</description>
+    <url>https://github.com/rbkmoney/cashreg-proto.git</url>
 
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Anatoly Cherkasov</name>
+            <email>a.cherkasov@rbkmoney.com</email>
+            <organization>RBK.money</organization>
+            <organizationUrl>https://rbk.money</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/rbkmoney/cashreg-proto.git</connection>
+        <developerConnection>scm:git:ssh://github.com/rbkmoney/cashreg-proto.git</developerConnection>
+        <url>https://github.com/rbkmoney/cashreg-proto/tree/master</url>
+    </scm>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <woody.version>[1.1.21,)</woody.version>
+        <damsel.version>1.439-b18f037</damsel.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.rbkmoney.woody</groupId>
             <artifactId>woody-thrift</artifactId>
-            <version>LATEST</version>
+            <version>${woody.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.rbkmoney</groupId>
             <artifactId>damsel</artifactId>
-            <version>1.346-36765b1</version>
+            <version>${damsel.version}</version>
         </dependency>
     </dependencies>
 
@@ -44,7 +67,7 @@
             <plugin>
                 <groupId>org.apache.thrift</groupId>
                 <artifactId>thrift-maven-plugin</artifactId>
-                <version>0.9.3-1</version>
+                <version>0.10.0</version>
                 <configuration>
                     <generator>java:fullcamel</generator>
                     <thriftSourceRoot>${project.basedir}/proto</thriftSourceRoot>
