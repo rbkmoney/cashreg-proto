@@ -42,5 +42,5 @@ struct ItemsLine {
     1: required string      product
     2: required i32         quantity
     3: required domain.Cash price
-    4: required string      tax
+    4: optional string      tax
 }
